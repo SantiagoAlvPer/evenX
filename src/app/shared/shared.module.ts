@@ -6,11 +6,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { UserTypeComponent } from './components/userType/user-type/user-type.component';
 import { EventTypeListComponent } from './components/event-type-list/event-type-list.component';
+import { AnimationComponent } from './components/animation/animation.component';
 const Components = [
   InputComponent,
   ButtonComponent,
   UserTypeComponent,
-  EventTypeListComponent
+  EventTypeListComponent,
+  AnimationComponent
 ];
 
 

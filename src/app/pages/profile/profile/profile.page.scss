@@ -1,20 +1,31 @@
-ion-card {
-    margin: 10px;
-  }
-  
-  ion-card-header {
-    background-color: #f4f4f4;
-    padding: 10px;
-  }
-  
-  ion-card-content {
-    padding: 10px;
-  }
-  
-  ion-item {
-    margin-bottom: 10px;
-  }
-  
-  ion-label {
-    font-weight: bold;
-  }
+
+.body {
+  --clr: #58bc82;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center; 
+}
+
+.container {
+  width: 95vw;
+  height: 35vh;
+  background: linear-gradient(0deg, rgb(37, 37, 37) 0%, rgb(37, 37, 37) 100%);
+  border-radius: 40px;
+  padding: 25px 5px;
+  border: 5px solid var(--clr);
+  box-shadow: rgba(133, 215, 133, 0.878) 0px 30px 30px -20px;
+  margin: 20px;
+}
+
+.item {
+  color: var(--clr);
+  border-radius: 20px;
+  margin-bottom: 5px;
+}
+
+.heading {
+  font-weight: 900;
+  font-size: 30px;
+  color: var(--clr);
+}

@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
 
-  <body>
+  <div class="body">
     <ion-card class="container">
       <div class="heading">Register</div>
       <form [formGroup] ="signupForm" (ngSubmit)="onSubmit()">
@@ -14,7 +14,7 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="6">
+            <ion-col size="12">
               <app-user-type [control]="typeUser"  (userTypeSelected)="onUserTypeSelected($event)"></app-user-type>
               <p>{{ selectedUserType }}</p>
             </ion-col>
@@ -30,10 +30,10 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="8">
+            <ion-col size="6">
               <app-input [control]="birthDate" type="date" [fill]="'outline'" label="BirthDate"></app-input>
             </ion-col>
-            <ion-col size="8">
+            <ion-col size="6">
               <app-input [control]="phone" label="Phone" type="text" [fill]="'outline'"
                 [placeholder]="'000-0000-000'"></app-input>
             </ion-col>
@@ -63,5 +63,5 @@
         </ion-grid>
       </form>
     </ion-card>
-  </body>
+  </div>
 </ion-content>
