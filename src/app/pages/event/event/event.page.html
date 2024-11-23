@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="'/home'">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Crear Evento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-label position="stacked">Tipo de Evento</ion-label>
+          <app-event-type-list [control]="typeEvent"
+            (eventTypeSelected)="onEventTypeSelected($event)"></app-event-type-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <app-input [control]="description" [label]="'Descripción'" [placeholder]="'Introduce una descripción'" [type]="'text'"
+            [fill]="'outline'">
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <app-input [control]="description" [label]="'Fecha del evento'" [placeholder]="'Selecciona una fecha'" [type]="'date'"
+            [fill]="'outline'">
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <app-input [control]="duration"  [label]="'Duración (en horas)'" [placeholder]="'Indica la duración'" [type]="'number'"
+            [fill]="'outline'">
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <app-input [control]="direccion" [label]="'Dirección'" [placeholder]="'Introduce la dirección'" [type]="'text'" [fill]="'outline'">
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <app-input [control]="specialRequirements" [label]="'Requisitos Especiales'" [placeholder]="'Especifica los requisitos'" [type]="'text'"
+            [fill]="'outline'">
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <app-input [control]="numberOfAttendees" [label]="'Número de Asistentes'" [placeholder]="'Número máximo de asistentes'" [type]="'number'"
+            [fill]="'outline'">
+          </app-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-button expand="block" type="submit" [disabled]="createEventForm.invalid">
+      Crear Evento
+    </ion-button>
+  </form>
+</ion-content>

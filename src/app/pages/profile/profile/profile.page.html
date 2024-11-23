@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil de Usuario</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ user?.name }}</ion-card-title>
+      <ion-card-subtitle>{{ user?.type }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Email</ion-label>
+        <ion-text>{{ user?.email }}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Teléfono</ion-label>
+        <ion-text>{{ user?.phone || 'No disponible' }}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Fecha de Nacimiento</ion-label>
+        <ion-text>{{ user?.birthDate || 'No disponible' }}</ion-text>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
