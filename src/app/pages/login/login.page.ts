@@ -1,8 +1,9 @@
 import { AuthService } from '../../shared/service/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
+import { ToastService } from 'src/app/shared/controllers/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,8 @@ export class LoginPage implements OnInit {
   constructor(
     private readonly authSvr: AuthService,
     private readonly navCtrl: NavController,
+    private readonly loadingService: LoadingService, 
+    private toastService: ToastService
 
   ) {
     this.loginForm = new FormGroup({
@@ -29,20 +32,23 @@ export class LoginPage implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.loginForm.valid) {
-  
       const { email, password } = this.loginForm.value;
+  
       try {
-        await this.authSvr.logInWithEmailAndPassword(email, password); 
-
+        await this.loadingService.show('Iniciando sesión...');
+        await this.authSvr.logInWithEmailAndPassword(email, password);
+        await this.toastService.presentToast('Inicio de sesión exitoso', true);
         this.navCtrl.navigateForward('home');
-
       } catch (error) {
-
-        console.error('Error logging in:', error);
+        console.error('Error iniciando sesión:', error);
+        await this.toastService.presentToast('Error al iniciar sesión. Inténtalo de nuevo.', false);
+      } finally {
+        await this.loadingService.dismiss();
       }
     } else {
-      console.log('Invalid form');
-
+      await this.toastService.presentToast('Por favor, completa todos los campos correctamente.', false);
+      console.log('Formulario inválido');
     }
   }
 }
+

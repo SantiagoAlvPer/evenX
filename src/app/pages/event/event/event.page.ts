@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
 import { IEvent } from 'src/app/shared/interfaces/ievent';
 import { AuthService } from 'src/app/shared/service/auth/auth.service';
 
@@ -25,7 +26,8 @@ export class EventPage implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly authSvr: AuthService,
-    private readonly firestore: AngularFirestore, // Inyectar AngularFirestore
+    private readonly firestore: AngularFirestore, 
+    private readonly loadingService: LoadingService
   ) {}
 
   
@@ -61,11 +63,16 @@ export class EventPage implements OnInit {
       };
 
       try {
-        await this.saveEvent(newEvent); // Llama a saveEvent para guardar el evento en Firestore
-        console.log('Evento creado con éxito');
+        // Mostrar el loader mientras se guarda el evento
+        await this.loadingService.show('Guardando evento...');
+        const eventID = await this.saveEvent(newEvent); // Llama a saveEvent para guardar el evento en Firestore
+        console.log(`Evento creado con éxito. ID: ${eventID}`);
         await this.router.navigate(['/home']);
       } catch (error) {
         console.error('Error al crear el evento:', error);
+      } finally {
+        // Asegurarse de que el loader siempre se cierre
+        await this.loadingService.dismiss();
       }
     } else {
       console.log('Formulario inválido:', this.createEventForm.value);
@@ -102,8 +109,8 @@ export class EventPage implements OnInit {
       description: new FormControl('', [Validators.required]),
       direccion: new FormControl('', [Validators.required]),
       duration: new FormControl('', [Validators.required]),
-      specialRequirements: new FormControl('', [Validators.required]),
-      numberOfAttendees: new FormControl('', [Validators.required]),
+      specialRequirements: new FormControl('null',),
+      numberOfAttendees: new FormControl('null',),
       typeEvent: new FormControl(''),
     });
 

@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/service/auth/auth.service';
 import { IUser } from '../../shared/interfaces/iuser';
+import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
+import { ToastService } from 'src/app/shared/controllers/toast/toast.service';
 
 
 
@@ -28,7 +30,8 @@ export class RegisterPage implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly authSvr: AuthService,
-
+    private readonly loadingService: LoadingService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -46,8 +49,8 @@ async  onUserTypeSelected(type: string){
   async onSubmit() {
     if (this.signupForm.valid) {
       const formValues = this.signupForm.value;
+  
 
-      // Crear un objeto de usuario SIN la contraseña
       const userData: IUser = {
         name: formValues.name,
         lastName: formValues.lastName,
@@ -55,24 +58,43 @@ async  onUserTypeSelected(type: string){
         birthDate: formValues.birthDate,
         phone: formValues.phone,
         email: formValues.email,
-        uid: '', // Este campo será completado por el servicio de autenticación
+        uid: '', 
       };
-
+  
       try {
-        // Registrar usuario con Firebase Authentication y almacenar datos en Firestore
+
+        await this.loadingService.show('Registrando usuario...');
+        
         await this.authSvr.doRegister(
           formValues.email,
           formValues.password,
           userData
         );
+  
         console.log('Usuario registrado correctamente');
+        
+        await this.toastService.presentToast('Usuario registrado con éxito', true);
+
         await this.router.navigate(['/login']);
       } catch (error) {
-       console.log('usuario no registrado', error);
+        console.error('Error al registrar el usuario:', error);
+        
+        await this.toastService.presentToast(
+          'Hubo un error al registrar el usuario',
+          false
+        );
+      } finally {
+
+        await this.loadingService.dismiss();
       }
+    } else {
+      console.log('Formulario inválido:', this.signupForm.value);
+      
+      await this.toastService.presentToast(
+        'Por favor, completa todos los campos correctamente',
+        false
+      );
     }
-    console.log(this.signupForm);
-    console.log('Estado inicial del formulario:', this.signupForm.value)
   }
 
   private initForm() {

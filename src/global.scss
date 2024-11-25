@@ -35,3 +35,81 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+.custom-loading {
+    --background: rgba(0, 0, 0, 0.5);
+    /* Fondo semitransparente */
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    /* Estilo para el loader */
+    .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: rotate(5deg);
+    }
+
+    /* Formato de los contenedores de los cuadrados */
+    .loader .form1,
+    .loader .form2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Estilo para cada cuadrado */
+    .square {
+        width: 50px;
+        height: 50px;
+        margin: 2px;
+        background-color: rgba(150, 150, 150, 0.253);
+        border-radius: 5px;
+        animation: blinking 0.8s ease-in-out infinite;
+        opacity: 0;
+    }
+
+    /* Animación para el parpadeo de los cuadrados */
+    @keyframes blinking {
+        0% {
+            opacity: 0.25;
+            background-color: rgba(4, 160, 30, 0.589);
+        }
+
+        50% {
+            opacity: 0.5;
+            background-color: var(--color-success-300);
+        }
+
+        75% {
+            opacity: 0.75;
+            background-color: var(--color-success-500);
+        }
+
+        100% {
+            opacity: 1;
+            background-color: var(--color-success-700);
+        }
+    }
+
+    /* Retraso de la animación para cada cuadrado */
+    .form1 .square:nth-child(1) {
+        animation-delay: 0.2s;
+    }
+
+    .form1 .square:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+
+    .form2 .square:nth-child(2) {
+        animation-delay: 0.6s;
+    }
+
+    .form2 .square:nth-child(1) {
+        animation-delay: 0.8s;
+    }
+}

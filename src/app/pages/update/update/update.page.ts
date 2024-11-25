@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
+import { ToastService } from 'src/app/shared/controllers/toast/toast.service';
 import { IUser } from 'src/app/shared/interfaces/iuser';
 import { AuthService } from 'src/app/shared/service/auth/auth.service';
 
@@ -23,7 +25,9 @@ export class UpdatePage implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly authSvr: AuthService
+    private readonly authSvr: AuthService,
+    private readonly loadingService: LoadingService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -49,22 +53,39 @@ export class UpdatePage implements OnInit {
 
   async onSubmit() {
     if (this.updateForm.valid) {
+      await this.loadingService.show('Actualizando usuario...'); // Mostrar spinner
       const updatedUserData: IUser = {
         ...this.updateForm.value,
-        uid: this.currentUserId!,
+        uid: this.currentUserId!,  
       };
-
+  
       try {
-        await this.authSvr.updateUser(updatedUserData); // Actualiza Firestore
+        await this.authSvr.updateUser(updatedUserData);
         console.log('Usuario actualizado correctamente');
+  
+        await this.toastService.presentToast('Usuario actualizado con éxito', true);
+  
         await this.router.navigate(['/home']);
       } catch (error) {
         console.error('Error al actualizar usuario:', error);
+  
+        await this.toastService.presentToast(
+          'Error al actualizar el usuario. Inténtalo de nuevo',
+          false
+        );
+      } finally {
+        await this.loadingService.dismiss();
       }
     } else {
       console.warn('Formulario inválido');
+
+      await this.toastService.presentToast(
+        'Por favor, completa todos los campos correctamente',
+        false
+      );
     }
   }
+
 
   private initForm() {
     this.updateForm = new FormGroup({

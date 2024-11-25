@@ -33,6 +33,18 @@ export class AuthService {
     );
   }
 
+  userIsAuthenticated(): Observable<boolean> {
+    return new Observable((observer) => {
+      this.authSvr.authState.subscribe((user) => {
+        observer.next(!!user); 
+      });
+    });
+  }
+  async getAuthenticatedUserId(): Promise<string | null> {
+    const user = await this.authSvr.currentUser;
+    return user ? user.uid : null;
+  }
+
 
   async getCurrentuser(): Promise<{ uid: string; email: string } | null> {
     try {
