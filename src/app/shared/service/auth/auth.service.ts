@@ -33,6 +33,7 @@ export class AuthService {
     );
   }
 
+
   async getCurrentuser(): Promise<{ uid: string; email: string } | null> {
     try {
       const currentUser = await this.authSvr.currentUser;

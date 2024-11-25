@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IEvent } from 'src/app/shared/interfaces/ievent';
 import { AuthService } from 'src/app/shared/service/auth/auth.service';
-import { EventService } from 'src/app/shared/service/event/event.service';
 
 @Component({
   selector: 'app-event',
@@ -27,7 +26,6 @@ export class EventPage implements OnInit {
     private readonly router: Router,
     private readonly authSvr: AuthService,
     private readonly firestore: AngularFirestore, // Inyectar AngularFirestore
-    private readonly eventService: EventService
   ) {}
 
   

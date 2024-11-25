@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from '../auth/auth.service';
 import { IEvent } from '../../interfaces/ievent';
-import { from, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
-
+  private selectedEventId = new BehaviorSubject<string | null>(null);
   private readonly collection: string = 'IEvents';
 
   constructor(
@@ -80,20 +80,21 @@ export class EventService {
   }
 
 
+  setSelectedEventId(eventID: string): void {
+    this.selectedEventId.next(eventID);
+  }
   
-  // Obtener evento por ID
+  getSelectedEventId(): Observable<string | null> {
+    return this.selectedEventId.asObservable();
+  }
+  
   getEventById(eventID: string): Observable<IEvent | undefined> {
     return this.fireStore
-    .collection(this.collection)
+      .collection('IEvents')
       .doc<IEvent>(eventID)
       .valueChanges()
       .pipe(
-        map(event => {
-          if (event) {
-            return { ...event, eventID: eventID };
-          }
-          return undefined;
-        })
+        map((event) => (event ? { ...event, eventID } : undefined))
       );
   }
 

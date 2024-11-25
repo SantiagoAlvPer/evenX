@@ -6,11 +6,67 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<ion-content>
+  <div class="body">
+    <ion-card class="container">
+      <div class="heading">
+        <form [formGroup]="updateEventForm" (ngSubmit)="onUpdateSubmit()">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <app-event-type-list [control]="typeEvent"
+                  (eventTypeSelected)="onEventTypeSelected($event)"></app-event-type-list>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <app-input [control]="description" [label]="'Descripción'" [placeholder]="'Introduce una descripción'"
+                  [type]="'text'" [fill]="'outline'">
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <app-input [control]="date" [label]="'Fecha del evento'" [placeholder]="'Selecciona una fecha'"
+                  [type]="'date'" [fill]="'outline'">
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <app-input [control]="duration" [label]="'Duración (en horas)'" [placeholder]="'Indica la duración'"
+                  [type]="'number'" [fill]="'outline'">
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <app-input [control]="direccion" [label]="'Dirección'" [placeholder]="'Introduce la dirección'"
+                  [type]="'text'" [fill]="'outline'">
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <app-input [control]="specialRequirements" [label]="'Requisitos Especiales'"
+                  [placeholder]="'Especifica los requisitos'" [type]="'text'" [fill]="'outline'">
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <app-input [control]="numberOfAttendees" [label]="'Número de Asistentes'"
+                  [placeholder]="'Número máximo de asistentes'" [type]="'number'" [fill]="'outline'">
+                </app-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">updateEvent</ion-title>
-    </ion-toolbar>
-  </ion-header>
+          <ion-button expand="block" type="submit">
+            Actualizar Evento
+          </ion-button>
+        </form>
+      </div>
+    </ion-card>
+  </div>
 </ion-content>

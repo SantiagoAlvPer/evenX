@@ -42,9 +42,9 @@ export class ProfilePage implements OnInit {
   });
 }
 
- // Método para redirigir a la página de actualización
- goToUpdateEvent(eventID: string) {
-  this.router.navigate(['/update-event', eventID]); 
+goToUpdateEvent(eventID: string) {
+  this.eventSvr.setSelectedEventId(eventID);
+this.router.navigate(['/update-event']);
 }
 
   deleteEvent(eventID: string) {
