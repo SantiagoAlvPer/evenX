@@ -28,7 +28,7 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <app-input [control]="description" [label]="'Fecha del evento'" [placeholder]="'Selecciona una fecha'" [type]="'date'"
+          <app-input [control]="date" [label]="'Fecha del evento'" [placeholder]="'Selecciona una fecha'" [type]="'date'"
             [fill]="'outline'">
           </app-input>
         </ion-col>
@@ -62,7 +62,7 @@
       </ion-row>
     </ion-grid>
 
-    <ion-button expand="block" type="submit" [disabled]="createEventForm.invalid">
+    <ion-button expand="block" type="submit" >
       Crear Evento
     </ion-button>
   </form>

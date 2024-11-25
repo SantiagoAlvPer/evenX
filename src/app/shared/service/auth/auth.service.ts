@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  currentUser$: Observable<{ uid: string; email: string } | null>;
 
   constructor(
     private readonly authSvr: AngularFireAuth,
@@ -22,30 +23,59 @@ export class AuthService {
     this.authSvr.authState.subscribe(user => {
       this.isAuthenticatedSubject.next(!!user);  // Actualiza el estado con true si el usuario está autenticado
     });
-  }
-// Método para obtener los datos del usuario actual
-async getCurrentUser(): Promise<any> {
-  try {
-    // Obtiene el usuario autenticado actual desde el servicio de autenticación
-    const currentUser = await this.authSvr.currentUser;
-    if (currentUser?.uid) {
-      // Accede al documento correspondiente al UID del usuario en Firestore
-      const userDoc = await this.fireStore.collection('IUser').doc(currentUser.uid).get().toPromise();
 
-      if (userDoc?.exists) {
-        // Si el documento existe, devuelve los datos del usuario
-        return userDoc.data();
-      } else {
-        throw new Error('Datos del usuario no encontrados en Firestore');
-      }
-    } else {
-      throw new Error('Usuario no autenticado');
-    }
-  } catch (error) {
-    console.error('Error al obtener el usuario:', error);
-    throw error;
+    this.currentUser$ = this.authSvr.authState.pipe(
+      map((user) =>
+        user
+          ? { uid: user.uid, email: user.email || '' } // Validamos que exista el usuario
+          : null
+      )
+    );
   }
-}
+
+  async getCurrentuser(): Promise<{ uid: string; email: string } | null> {
+    try {
+      const currentUser = await this.authSvr.currentUser;
+      return currentUser
+        ? { uid: currentUser.uid, email: currentUser.email || '' }
+        : null;
+    } catch (error) {
+      console.error('Error al obtener el usuario:', error);
+      return null;
+    }
+  }
+
+ async getCurrentUser(): Promise<any> {
+    try {
+      const currentUser = await this.authSvr.currentUser;
+      if (currentUser?.uid) {
+        const userDoc = await this.fireStore.collection('IUser').doc(currentUser.uid).get().toPromise();
+        if (userDoc?.exists) {
+          return userDoc.data();
+        } else {
+          throw new Error('Datos del usuario no encontrados en Firestore');
+        }
+      } else {
+        throw new Error('Usuario no autenticado');
+      }
+    } catch (error) {
+      console.error('Error al obtener el usuario:', error);
+      throw error;
+    }
+    
+  }
+   // Método para obtener el UID del usuario autenticado
+   currentID(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.authSvr.currentUser.then(user => {
+        if (user) {
+          resolve(user.uid); // Devuelve el UID del usuario
+        } else {
+          reject('No hay usuario autenticado');
+        }
+      });
+    });
+  }
   // Método para obtener el estado de autenticación actual
   isAuthenticated(): boolean {
     return this.isAuthenticatedSubject.value;
@@ -86,6 +116,16 @@ async getCurrentUser(): Promise<any> {
     } catch (error) {
       console.error('Error al registrar usuario:', error);
       throw error;  // Opcional: puedes lanzar el error para manejarlo en el lugar que llame a este método
+    }
+  }
+
+  async updateUser(userData: IUser): Promise<void> {
+    try {
+      const userRef = this.fireStore.collection('IUser').doc(userData.uid);
+      await userRef.update(userData);
+    } catch (error) {
+      console.error('Error actualizando usuario:', error);
+      throw error;
     }
   }
 

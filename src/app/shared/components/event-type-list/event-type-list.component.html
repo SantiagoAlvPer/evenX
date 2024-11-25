@@ -1,12 +1,12 @@
 <ion-grid>
   <ion-row>
     <ion-col>
-      <ion-label>Selecciona el tipo de evento</ion-label>
-      <select (ionChange)="onUserTypeChange($event)" [formControl]="control">
-        <option *ngFor="let type of eventTypes" [value]="type">
-          {{ type }}
-        </option>
-      </select>
+      <ion-label class="" >Seleccionar tipo de evento</ion-label>
+      <ion-select [formControl]="control" (ionChange)="onUserTypeChange($event)">
+        <ion-select-option *ngFor="let eventType of eventTypes" [value]="eventType">
+          {{ eventType }}
+        </ion-select-option>
+      </ion-select>
     </ion-col>
   </ion-row>
 </ion-grid>

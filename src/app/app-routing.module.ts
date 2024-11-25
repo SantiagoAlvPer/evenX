@@ -23,6 +23,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/event/event/event.module').then( m => m.EventPageModule)
   },
   {
+    path: 'update',
+    loadChildren: () => import('./pages/update/update/update.module').then( m => m.UpdatePageModule)
+  },
+  {
+    path: 'update-event',
+    loadChildren: () => import('./pages/update-event/update-event.module').then( m => m.UpdateEventPageModule)
+  },
+  {
     path: '**',
     redirectTo: 'login',
     pathMatch: 'full'

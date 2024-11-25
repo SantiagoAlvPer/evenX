@@ -13,6 +13,8 @@ import { IUser } from '../../shared/interfaces/iuser';
 })
 export class RegisterPage implements OnInit {
   selectedUserType: string = '';
+  isEditMode: boolean = false; // Determina si estamos en modo actualización
+  currentUserId: string | null = null; // UID del usuario actual
 
   public name!: FormControl;
   public lastName!: FormControl;

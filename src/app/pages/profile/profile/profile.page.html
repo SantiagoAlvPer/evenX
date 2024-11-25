@@ -11,8 +11,8 @@
   <div class="body">
     <ion-card class="container">
       <ion-card-header>
-        <ion-card-title class="heading">{{ user?.name }}</ion-card-title>
-        <ion-card-subtitle>{{ user?.type }}</ion-card-subtitle>
+        <ion-card-title class="heading">{{ user?.name }}  {{user?.lastName}}</ion-card-title>
+        <ion-text>{{ user?.userType }}</ion-text>
       </ion-card-header>
 
       <ion-card-content>
@@ -32,5 +32,28 @@
         </ion-item>
       </ion-card-content>
     </ion-card>
+
+
+
+    <!-- Eventos -->
+    <div class="events-container">
+      <ion-card *ngFor="let event of userEvents">
+        <ion-card-header>
+          <ion-card-title class="heading">{{ event.typeEvent }}</ion-card-title>
+          <ion-card-subtitle>{{ event.date | date }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <p class="item">{{ event.description }}</p>
+          <p class="item"><strong>Dirección:</strong> {{ event.direccion }}</p>
+          <p class="item"><strong>Duración:</strong> {{ event.duration }}</p>
+          <p class="item"><strong>Requisitos Especiales:</strong> {{ event.specialRequirements }}</p>
+          <p class="item"><strong>Asistentes:</strong> {{ event.numberOfAttendees }}</p>
+          <app-button type="submit" value="Delete" (click)="deleteEvent(event.eventID)"></app-button>
+          <app-button  value="Update" (click)="goToUpdateEvent(event.eventID)"></app-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
+
+
 </ion-content>

@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IEvent } from 'src/app/shared/interfaces/ievent';
 import { AuthService } from 'src/app/shared/service/auth/auth.service';
 import { EventService } from 'src/app/shared/service/event/event.service';
 
 @Component({
-  selector: 'app-event',
-  templateUrl: './event.page.html',
-  styleUrls: ['./event.page.scss'],
+  selector: 'app-update-event',
+  templateUrl: './update-event.page.html',
+  styleUrls: ['./update-event.page.scss'],
 })
-export class EventPage implements OnInit {
+export class UpdateEventPage implements OnInit {
   selectedEventType: string = '';
+  eventID: string = '';  // Guardamos el eventID aquí
 
   public date!: FormControl;
   public description!: FormControl;
@@ -25,75 +26,69 @@ export class EventPage implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly authSvr: AuthService,
-    private readonly firestore: AngularFirestore, // Inyectar AngularFirestore
-    private readonly eventService: EventService
+    private readonly eventService: EventService,  
   ) {}
-
-  
 
   ngOnInit() {
     this.initForm();
-    console.log('Estado inicial del formulario:', this.createEventForm.value);
-    
-  }
-  
+    this.eventID = 'eventoID-aqui'; 
 
-  onEventTypeSelected(eventType: string) {
-    console.log('Tipo de evento seleccionado:', eventType);
-    this.selectedEventType = eventType; // Actualiza la variable con el tipo de evento seleccionado
+    // Cargar los datos del evento al iniciar
+    this.loadEventData();
   }
 
-
+  private loadEventData() {
+    this.eventService.getEventById(this.eventID).subscribe((event) => {
+      if (event) {
+        this.createEventForm.patchValue({
+          date: event.date,
+          description: event.description,
+          direccion: event.direccion,
+          duration: event.duration,
+          specialRequirements: event.specialRequirements,
+          numberOfAttendees: event.numberOfAttendees,
+          typeEvent: event.typeEvent,
+        });
+        this.selectedEventType = event.typeEvent;
+      } else {
+        console.error('Evento no encontrado');
+      }
+    });
+  }
 
   async onSubmit() {
     if (this.createEventForm.valid) {
       const formValues = this.createEventForm.value;
-      const currentUserUID = await this.authSvr.currentID();
-      const newEvent: IEvent = {
-        creatorID: currentUserUID, // El creatorID será asignado dentro del servicio
+      const updatedEvent: IEvent = {
+        eventID: this.eventID,  
         date: formValues.date,
         description: formValues.description,
         direccion: formValues.direccion,
         duration: formValues.duration,
-        eventID: '', // El eventID será generado por Firestore
-        numberOfAttendees: formValues.numberOfAttendees,
         specialRequirements: formValues.specialRequirements,
         typeEvent: formValues.typeEvent,
+        numberOfAttendees: formValues.numberOfAttendees,
+        creatorID: 'currentUserUID', 
       };
 
       try {
-        await this.saveEvent(newEvent); // Llama a saveEvent para guardar el evento en Firestore
-        console.log('Evento creado con éxito');
+        await this.updateEvent(updatedEvent);
+        console.log('Evento actualizado con éxito');
         await this.router.navigate(['/home']);
       } catch (error) {
-        console.error('Error al crear el evento:', error);
+        console.error('Error al actualizar el evento:', error);
       }
     } else {
       console.log('Formulario inválido:', this.createEventForm.value);
     }
   }
 
-
-
-  private async saveEvent(event: IEvent): Promise<string> {
+  private async updateEvent(event: IEvent): Promise<void> {
     try {
-      const eventRef = this.firestore.collection("IEvents");
-
-      // Agregar el evento y obtener la referencia del documento creado
-      const docRef = await eventRef.add(event);
-
-      // Asignar el ID generado automáticamente por Firestore al campo eventID
-      event.eventID = docRef.id;
-
-      // Actualizar el documento con el campo eventID
-      await eventRef.doc(docRef.id).update({ eventID: docRef.id });
-
-      console.log('Evento guardado con ID:', docRef.id);
-
-      return docRef.id; // Retornar el ID del evento
+      await this.eventService.updateEvent(event);
+      console.log('Evento actualizado en Firestore');
     } catch (error) {
-      console.error('Error al guardar el evento en Firestore:', error);
+      console.error('Error al actualizar el evento en Firestore:', error);
       throw error;
     }
   }
@@ -113,12 +108,9 @@ export class EventPage implements OnInit {
     this.description = this.createEventForm.get('description') as FormControl;
     this.direccion = this.createEventForm.get('direccion') as FormControl;
     this.duration = this.createEventForm.get('duration') as FormControl;
-    this.specialRequirements = this.createEventForm.get(
-      'specialRequirements'
-    ) as FormControl;
+    this.specialRequirements = this.createEventForm.get('specialRequirements') as FormControl;
     this.typeEvent = this.createEventForm.get('typeEvent') as FormControl;
-    this.numberOfAttendees = this.createEventForm.get(
-      'numberOfAttendees'
-    ) as FormControl;
+    this.numberOfAttendees = this.createEventForm.get('numberOfAttendees') as FormControl;
   }
-}
+} 
+

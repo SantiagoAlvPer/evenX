@@ -1,0 +1,15 @@
+<div class="events-container">
+  <ion-card *ngFor="let event of allEvents">
+    <ion-card-header>
+      <ion-card-title class="heading">{{ event.typeEvent }}</ion-card-title>
+      <ion-card-subtitle>{{ event.date | date }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p class="item">{{ event.description }}</p>
+      <p class="item"><strong>Dirección:</strong> {{ event.direccion }}</p>
+      <p class="item"><strong>Duración:</strong> {{ event.duration }}</p>
+      <p class="item"><strong>Requisitos Especiales:</strong> {{ event.specialRequirements }}</p>
+      <p class="item"><strong>Asistentes:</strong> {{ event.numberOfAttendees }}</p>
+    </ion-card-content>
+  </ion-card>
+</div>

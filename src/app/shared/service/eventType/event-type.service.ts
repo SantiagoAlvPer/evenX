@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class EventTypeService {
-  private eventTypes = [' boda ',
+  private eventTypes = [
+' boda ',
 'cumpleaños',
 'aniversario',
 'baby shower',

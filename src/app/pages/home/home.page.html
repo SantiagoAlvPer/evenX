@@ -11,10 +11,23 @@
       <ion-button [routerLink]="'/event'">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
       </ion-button>
+
+      <ion-button (click)="showPopover($event)">
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
+      </ion-button>
+
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <app-button  value="Log out" (click)="LogOut()"></app-button> 
+  <div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <app-event></app-event>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
 </ion-content>
