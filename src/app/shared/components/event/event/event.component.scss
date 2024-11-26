@@ -1,37 +1,19 @@
-.body {
-  --clr: #58bc82;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
 .container {
-  width: 95vw;
+  --clr: #58bc82;
+  width: 90vw;
   background: linear-gradient(0deg, rgb(37, 37, 37) 0%, rgb(37, 37, 37) 100%);
   border-radius: 40px;
   padding: 25px 5px;
-  border: 5px solid var(--clr);
+  border: 3px solid var(--clr);
   box-shadow: rgba(133, 215, 133, 0.878) 0px 30px 30px -20px;
 }
 
-.events-container {
-  width: 95vw;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Permitir scroll en ion-content */
-ion-content {
-  overflow-y: auto; /* Asegura que el contenido haga scroll */
+.date {
+  color: white;
 }
 
 .item {
   color: var(--clr);
-  border-radius: 20px;
   margin-bottom: 5px;
 }
 

@@ -39,7 +39,6 @@
 
 .custom-loading {
     --background: rgba(0, 0, 0, 0.5);
-    /* Fondo semitransparente */
     padding: 0;
     display: flex;
     justify-content: center;
@@ -51,7 +50,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        transform: rotate(5deg);
     }
 
     /* Formato de los contenedores de los cuadrados */
@@ -70,7 +68,6 @@
         background-color: rgba(150, 150, 150, 0.253);
         border-radius: 5px;
         animation: blinking 0.8s ease-in-out infinite;
-        opacity: 0;
     }
 
     /* Animación para el parpadeo de los cuadrados */
